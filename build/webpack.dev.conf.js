@@ -37,10 +37,6 @@ module.exports = merge(baseWebpackConfig, {
   ]
 })
 
-
-
-console.log(pages)
-
 for (var pathname in pages) {
   // 配置生成的html文件，定义路径等
   var conf = {
@@ -49,7 +45,6 @@ for (var pathname in pages) {
     chunks: [pathname, 'vendor', 'manifest'], // 每个html引用的js模块
     inject: true              // js插入位置
   };
-  console.log(conf)
   // 需要生成几个html文件，就配置几个HtmlWebpackPlugin对象
   module.exports.plugins.push(new HtmlWebpackPlugin(conf));
 }

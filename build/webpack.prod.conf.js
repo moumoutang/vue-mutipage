@@ -106,7 +106,6 @@ if (config.build.bundleAnalyzerReport) {
 }
 
 for (var pathname in pages) {
-  console.log(pathname);
   // 配置生成的html文件，定义路径等
   var conf = {
     // filename: pathname + '.html',

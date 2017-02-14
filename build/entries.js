@@ -11,7 +11,6 @@ function getEntry(globPath){
      pathname = tmp.splice(0, 1) + '/' + viewname + '/' + basename; // 正确输出js和html的路径
      entries[pathname] = entry;
    });
-   console.log(entries);
    return entries;
 }
 

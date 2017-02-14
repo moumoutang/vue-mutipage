@@ -51,7 +51,7 @@ Object.keys(proxyTable).forEach(function (context) {
 })
 
 // handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
+//app.use(require('connect-history-api-fallback')())
 
 // serve webpack bundle output
 app.use(devMiddleware)
@@ -60,15 +60,42 @@ app.use(devMiddleware)
 // compilation error display
 app.use(hotMiddleware)
 
+// 路由
+app.get('/:viewname/:pagename?', function(req, res, next) {
+    console.log(req.params)
+    var viewname = '';
+    if(!req.params.viewname){
+      viewname = '/views/index/index.html'
+    }else{
+      if(req.params.pagename){
+        viewname = '/views/' + req.params.viewname + '/' + req.params.pagename + '.html'
+      }else{
+        viewname = '/views/' + req.params.viewname + '/index.html'
+      }
+    }
+    var filepath = path.join(compiler.outputPath, viewname);
+
+    //使用webpack提供的outputFileSystem
+    compiler.outputFileSystem.readFile(filepath, function(err, result) {
+        if (err) {
+            // something error
+            return next(err);
+        }
+        res.set('content-type', 'text/html');
+        res.send(result);
+        res.end();
+    });
+});
+
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
 var uri = 'http://localhost:' + port
 
-devMiddleware.waitUntilValid(function () {
-  console.log('> Listening at ' + uri + '\n')
-})
+// devMiddleware.waitUntilValid(function () {
+//   console.log('> Listening at ' + uri + '\n')
+// })
 
 module.exports = app.listen(port, function (err) {
   if (err) {
@@ -78,6 +105,6 @@ module.exports = app.listen(port, function (err) {
 
   // when env is testing, don't need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-    opn(uri)
+    opn(uri+"/second/index")
   }
 })
