@@ -1,7 +1,8 @@
 # vue2.0 + webpack 2.0  多页面构建
 
 > base construction for mutilpage
-
+# 项目结构
+![src目录示例]（http://inimg01.jiuyan.info/0463fa67-6c8e-4bea-b531-5e383746b0e6）
 ## Build Setup
 
 ``` bash
