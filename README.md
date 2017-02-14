@@ -1,4 +1,4 @@
-# vue-mutipage
+# vue2.0 + webpack 2.0  多页面构建
 
 > base construction for mutilpage
 
