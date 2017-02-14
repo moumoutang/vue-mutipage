@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <img src="../../../assets/logo.png">
     <Hello></Hello>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello';
+import Hello from './Hello';
 
 export default {
   name: 'app',

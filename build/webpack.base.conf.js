@@ -2,15 +2,16 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var merge = require('webpack-merge')
+var getEntry = require('./entries')
+var entries = getEntry('./src/views/**/*.js')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
 module.exports = {
-  entry: {
-    app: './src/main.js'
-  },
+  entry: merge({},entries),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

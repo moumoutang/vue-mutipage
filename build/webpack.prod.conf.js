@@ -9,6 +9,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
   : config.build.env
+var getEntry = require('./entries')
+var pages = getEntry('./src/views/**/*.html');
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -41,22 +43,22 @@ var webpackConfig = merge(baseWebpackConfig, {
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
-        ? 'index.html'
-        : config.build.index,
-      template: 'index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: process.env.NODE_ENV === 'testing'
+    //     ? 'index.html'
+    //     : config.build.index,
+    //   template: 'index.html',
+    //   inject: true,
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeAttributeQuotes: true
+    //     // more options:
+    //     // https://github.com/kangax/html-minifier#options-quick-reference
+    //   },
+    //   // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+    //   chunksSortMode: 'dependency'
+    // }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -101,6 +103,29 @@ if (config.build.productionGzip) {
 if (config.build.bundleAnalyzerReport) {
   var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
   webpackConfig.plugins.push(new BundleAnalyzerPlugin())
+}
+
+for (var pathname in pages) {
+  console.log(pathname);
+  // 配置生成的html文件，定义路径等
+  var conf = {
+    // filename: pathname + '.html',
+    filename: pathname + '.html',
+    template: pages[pathname], // 模板路径
+    chunks: [pathname, 'vendor', 'manifest'], // 每个html引用的js模块
+    inject: true,              // js插入位置
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true
+      // more options:
+      // https://github.com/kangax/html-minifier#options-quick-reference
+    },
+    // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+    chunksSortMode: 'dependency'
+  };
+  // 需要生成几个html文件，就配置几个HtmlWebpackPlugin对象
+  webpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
 }
 
 module.exports = webpackConfig
